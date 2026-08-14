@@ -1,0 +1,6 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
+    <app-stats-card [title]="'Total Users'" [value]="stats().total_users" [icon]="'people'"
+        [color]="'primary'"></app-stats-card>
+    <app-stats-card [title]="'Total Items'" [value]="stats().total_items" [icon]="'inventory'"
+        [color]="'secondary'"></app-stats-card>
+</div>
