@@ -1,0 +1,141 @@
+<div class="p-6">
+    <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-semibold text-gray-800">
+            Items Page
+        </h1>
+
+        <button (click)="openModal()" class="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700">
+            Add Item
+        </button>
+    </div>
+    <div class="mt-4">
+        <table class="table-auto border-collapse border border-gray-300">
+            <thead class="bg-gray-100">
+                <tr class="text-left">
+                    <th class="border border-gray-300 px-4 py-2">ID</th>
+                    <th class="border border-gray-300 px-4 py-2">Name</th>
+                    <th class="border border-gray-300 px-4 py-2">Quantity</th>
+                    <th class="border border-gray-300 px-4 py-2">Description</th>
+                    <th class="border border-gray-300 px-4 py-2">Price</th>
+                    <th class="border border-gray-300 px-4 py-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (i of items(); track i.id) {
+                <tr>
+                    <td class="border border-gray-300 px-4 py-2">{{ i.id }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ i.name }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ i.quantity }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ i.price }}</td>
+                    <td class="border border-gray-300 px-4 py-2">{{ i.description }}</td>
+                    <td class="border border-gray-300 px-4 py-2">
+                        <button class="px-2 py-1 text-white bg-blue-600 rounded hover:bg-blue-700"
+                            (click)="editItem(i.id)">
+                            Edit
+                        </button>
+                        <button class="px-2 py-1 ml-2 text-white bg-red-600 rounded hover:bg-red-700"
+                            (click)="deleteItem(i.id)">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<dialog #itemModal
+    class="rounded-xl shadow-2xl border-0 p-0 w-full max-w-md backdrop:bg-gray-900/60 backdrop:backdrop-blur-sm inset-0 m-auto ">
+    <div class="bg-white p-6 flex flex-col gap-5">
+
+        <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-900">
+                {{ editingItemId !== null ? 'Edit Item' : 'Add Item' }}
+            </h3>
+            <button (click)="closeModal()" type="button"
+                class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-1 rounded-lg transition-colors text-xl leading-none">
+            </button>
+        </div>
+        <form [formGroup]="itemForm" (ngSubmit)="addItem()">
+            <div class="flex flex-col gap-1.5">
+                <label for="itemName" class="text-sm font-medium text-gray-700">Item Name</label>
+                <input formControlName="name" #itemInput id="itemName" type="text" placeholder="Enter item name..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" />
+                <div *ngIf="itemForm.get('name')?.touched && itemForm.get('name')?.invalid">
+                    <small class="text-red-500" *ngIf="itemForm.get('name')?.errors?.['required']">
+                        Item name is required.
+                    </small>
+                    <small class="text-red-500" *ngIf="itemForm.get('name')?.errors?.['minlength']">
+                        Item name must be at least 2 characters long.
+                    </small>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="itemQuantity" class="text-sm font-medium text-gray-700">Item Quantity</label>
+                <input formControlName="quantity" #quantityInput id="itemQuantity" type="number"
+                    placeholder="Enter item quantity..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" />
+                <div *ngIf="itemForm.get('quantity')?.touched && itemForm.get('quantity')?.invalid">
+                    <small class="text-red-500" *ngIf="itemForm.get('quantity')?.errors?.['required']">
+                        Item quantity is required.
+                    </small>
+                    <small class="text-red-500" *ngIf="itemForm.get('quantity')?.errors?.['min']">
+                        Item quantity must be at least 1.
+                    </small>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+                <label for="itemPrice" class="text-sm font-medium text-gray-700">Item Price</label>
+                <input formControlName="price" #priceInput id="itemPrice" type="number" step="0.01"
+                    placeholder="Enter item price..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" />
+                <div *ngIf="itemForm.get('price')?.touched && itemForm.get('price')?.invalid">
+                    <small class="text-red-500" *ngIf="itemForm.get('price')?.errors?.['required']">
+                        Item price is required.
+                    </small>
+                    <small class="text-red-500" *ngIf="itemForm.get('price')?.errors?.['min']">
+                        Item price must be at least 0.
+                    </small>
+                </div>
+            </div>
+
+
+            <div class="flex flex-col gap-1.5">
+                <label for="itemDescription" class="text-sm font-medium text-gray-700">Item Description</label>
+                <textarea #descriptionInput formControlName="description" id="itemDescription"
+                    placeholder="Enter item description..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"></textarea>
+                <div *ngIf="itemForm.get('description')?.touched && itemForm.get('description')?.invalid">
+                    <small class="text-red-500" *ngIf="itemForm.get('description')?.errors?.['required']">
+                        Item description is required.
+                    </small>
+                    <small class="text-red-500" *ngIf="itemForm.get('description')?.errors?.['minlength']">
+                        Item description must be at least 2 characters long.
+                    </small>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-2">
+                <button (click)="closeModal()" type="button"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                    Cancel
+                </button>
+                <button type="submit"
+                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
+                    {{ editingItemId !== null ? 'Update Item' : 'Add Item' }}
+                </button>
+            </div>
+        </form>
+
+
+    </div>
+</dialog>
+
+@if(showAlert) {
+<app-alert-dialog [title]="alertDialog.title" [message]="alertDialog.message" type="error" confirmText="Delete"
+    (confirm)="onConfirmDelete()" (cancel)="onCancel()">
+</app-alert-dialog>
+}

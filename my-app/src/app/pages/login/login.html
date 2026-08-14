@@ -1,0 +1,64 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+
+    <div class="w-full max-w-sm p-8 bg-white rounded-xl shadow-md">
+
+        <div class="mb-6 text-center">
+            <h1 class="text-2xl font-semibold text-gray-800">
+                Login
+            </h1>
+
+            <p class="mt-1 text-sm text-gray-500">
+                Sign in to your account
+            </p>
+        </div>
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+            <div class="flex flex-col gap-4">
+                <div>
+                    <label class="block mb-1 text-sm font-medium text-gray-700">
+                        Username
+                    </label>
+
+                    <input type="text" placeholder="Enter your username" formControlName="username"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
+                    <div *ngIf="userForm.get('username')?.touched && userForm.get('username')?.invalid">
+                        <small class="text-red-500" *ngIf="userForm.get('username')?.errors?.['required']">
+                            Username is required.
+                        </small>
+                        <small class="text-red-500" *ngIf="userForm.get('username')?.errors?.['minlength']">
+                            Username must be at least 5 characters long.
+                        </small>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block mb-1 text-sm font-medium text-gray-700">
+                        Password
+                    </label>
+
+                    <input type="password" placeholder="Enter your password" formControlName="password"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500" />
+                    <div *ngIf="userForm.get('password')?.touched && userForm.get('password')?.invalid">
+                        <small class="text-red-500" *ngIf="userForm.get('password')?.errors?.['required']">
+                            Password is required.
+                        </small>
+                        <small class="text-red-500" *ngIf="userForm.get('password')?.errors?.['minlength']">
+                            Password must be at least 8 characters long.
+                        </small>
+                    </div>
+
+
+                </div>
+
+                <button class="w-full py-2 mt-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700" type="submit">
+                    Login
+                </button>
+                <h4 class="mt-4 text-sm text-center text-gray-600">Don't have an account?
+                    <a routerLink="/register" class="text-blue-600 hover:underline">
+                        Register here.
+                    </a>
+                </h4>
+            </div>
+        </form>
+    </div>
+
+</div>

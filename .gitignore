@@ -1,0 +1,5 @@
+.env
+.env.*
+# ...but the templates are meant to be committed.
+!.env*.example
+*.sh
