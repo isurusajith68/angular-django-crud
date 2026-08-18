@@ -12,13 +12,12 @@ export class Characters implements OnInit {
   api = inject(Api);
   isLoading = signal(true);
   error = signal('');
-
-  characters: Character[] = [];
+  characters = signal<Character[]>([]);
 
   ngOnInit() {
     this.api.getCharacters().subscribe({
       next: (data: CharacterListResponse) => {
-        this.characters = data.characters ?? [];
+        this.characters.set(data.characters ?? []);
         this.isLoading.set(false);
       },
       error: (err) => {

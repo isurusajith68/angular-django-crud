@@ -47,7 +47,7 @@ export class Login {
       });
     } else {
       console.log('Form is invalid');
-
+      this.userForm.markAllAsTouched();
       this.toaster.error('Please fill in all required fields correctly.', 'Error');
     }
   }
