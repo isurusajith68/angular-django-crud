@@ -11,6 +11,7 @@ type ItemsTy = {
   description: string;
   price: number;
   quantity: number;
+  type: 'consumable' | 'non-consumable';
 };
 
 @Component({
@@ -35,6 +36,7 @@ export class Items implements OnInit {
       quantity: ['', [Validators.required, Validators.min(1)]],
       description: ['', [Validators.required, Validators.minLength(2)]],
       price: ['', [Validators.required, Validators.min(0)]],
+      type: ['', [Validators.required]],
     });
   }
 
@@ -67,6 +69,7 @@ export class Items implements OnInit {
         quantity: item.quantity,
         description: item.description,
         price: item.price,
+        type: item.type,
       });
       this.openModal();
       this.editingItemId = itemId;
@@ -103,6 +106,7 @@ export class Items implements OnInit {
         quantity: this.itemForm.get('quantity')?.value,
         description: this.itemForm.get('description')?.value,
         price: this.itemForm.get('price')?.value,
+        type: this.itemForm.get('type')?.value,
       };
 
       if (this.editingItemId) {

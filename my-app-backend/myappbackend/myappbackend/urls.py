@@ -23,10 +23,17 @@ item_urlpatterns = [
     path("items/<int:pk>/", views.ItemRetrieveUpdateDestroyView.as_view(), name="item-retrieve-update-destroy"),
 ]
 
+character_urlpatterns = [
+    path("characters/", views.CharacterListView.as_view(), name="character-list"),
+    path("characters/<int:pk>/", views.CharacterDetailView.as_view(), name="character-detail"),
+]
 urlpatterns = [
     path("", include(router.urls)),
     path("auth/", include(auth_urlpatterns)),
     path("api/", include(item_urlpatterns)),
+    path("api/", include(character_urlpatterns)),
     path("api/stats/", views.StatsView.as_view(), name="stats"),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]
+
+

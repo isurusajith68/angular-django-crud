@@ -6,6 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import Item
 from .serializers import ItemSerializer
+from .services.api_requests import UpstreamError, fetch_character, fetch_characters
 
 
 from quickstart.serializers import (
@@ -122,3 +123,33 @@ class StatsView(APIView):
                 "total_items": total_items,
             }
         )
+
+
+class CharacterListView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        try:
+            data = fetch_characters(
+                page=request.query_params.get("page", 1),
+                limit=request.query_params.get("limit", 10),
+                name=request.query_params.get("name"),
+            )
+        except UpstreamError as exc:
+            return Response({"error": str(exc)}, status=exc.status_code)
+        return Response(data)
+
+
+class CharacterDetailView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            data = fetch_character(pk)
+        except UpstreamError as exc:
+            if exc.status_code == 404:
+                return Response(
+                    {"error": "Character not found"}, status=status.HTTP_404_NOT_FOUND
+                )
+            return Response({"error": str(exc)}, status=exc.status_code)
+        return Response(data)
