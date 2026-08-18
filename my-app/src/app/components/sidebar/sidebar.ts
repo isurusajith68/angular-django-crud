@@ -18,6 +18,7 @@ export class Sidebar implements OnInit {
     { label: 'Dashboard', href: '/dashboard' },
     // { label: 'Users', href: '/users' },
     { label: 'Items', href: '/items' },
+    { label: 'Characters', href: '/characters' },
   ];
 
   ngOnInit() {

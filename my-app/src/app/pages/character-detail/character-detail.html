@@ -1,0 +1,52 @@
+<div class="p-6 flex flex-col gap-4">
+    <a routerLink="/characters" class="text-sm text-blue-600 hover:underline"> Back to characters</a>
+
+    @if (isLoading()) {
+    <p class="text-gray-500">Loading character...</p>
+    } @else if (error()) {
+    <p class="text-red-600">{{ error() }}</p>
+    } @else if (character(); as c) {
+    <h1 class="text-2xl font-semibold text-gray-800">{{ c.name }}</h1>
+
+    <div class="flex flex-wrap gap-6">
+        <div class="flex flex-wrap gap-3">
+            @for (image of c.images; track image) {
+            <img [src]="image" [alt]="c.name"
+                class="h-64 w-48 rounded object-cover object-top border border-gray-200" />
+            } @empty {
+            <div class="h-64 w-48 rounded bg-gray-100 grid place-items-center text-sm text-gray-400">
+                No image
+            </div>
+            }
+        </div>
+        <div class="flex flex-col gap-2">
+            <p class="text-gray-600 capitalize">
+                debut:
+                <span class="text-gray-800 ">
+                    {{
+                    c?.debut?.manga
+                    }}
+                </span>
+            </p>
+            <p class="text-gray-600 capitalize">
+                anime:
+                <span class="text-gray-800">
+                    {{
+                    c?.debut?.anime
+                    }}
+                </span>
+            </p>
+
+            <p class="text-gray-600 capitalize">
+                movie:
+                <span class="text-gray-800">
+                    {{
+                    c?.debut?.movie
+                    }}
+                </span>
+            </p>
+
+        </div>
+    </div>
+    }
+</div>

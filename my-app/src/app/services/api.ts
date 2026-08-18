@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 export interface CurrentUser {
@@ -27,6 +27,36 @@ export interface Item {
   price: string;
   created_at: string;
   updated_at: string;
+}
+
+export interface Character {
+  id: number;
+  name: string;
+  images: string[];
+  debut?: {
+    manga?: string;
+    anime?: string;
+    novel?: string;
+    movie?: string;
+    game?: string;
+    ova?: string;
+    appearsIn?: string;
+  };
+  family?: {
+    [key: string]: string;
+  };
+  jutsu?: string[];
+  natureType?: string[];
+
+  tools?: string[];
+  uniqueTraits?: string[];
+}
+
+export interface CharacterListResponse {
+  characters: Character[];
+  currentPage: number;
+  pageSize: number;
+  total: number;
 }
 
 export type ItemPayload = Omit<Item, 'id' | 'created_at' | 'updated_at'>;
@@ -99,5 +129,19 @@ export class Api {
   getStats() {
     const url = `${this.baseUrl}/api/stats/`;
     return this.http.get<Stats>(url);
+  }
+
+  getCharacter(id: number) {
+    const url = `${this.baseUrl}/api/characters/${id}/`;
+    return this.http.get<Character>(url);
+  }
+
+  getCharacters(page = 1, limit = 10, name?: string) {
+    const url = `${this.baseUrl}/api/characters/`;
+    let params = new HttpParams().set('page', page).set('limit', limit);
+    if (name) {
+      params = params.set('name', name);
+    }
+    return this.http.get<CharacterListResponse>(url, { params });
   }
 }
