@@ -1,4 +1,5 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
+import { SKIP_AUTH } from '../interceptors/auth-interceptor';
 import { inject, Injectable } from '@angular/core';
 
 export interface CurrentUser {
@@ -93,7 +94,9 @@ export class Api {
 
   createUser(user: any) {
     const url = `${this.baseUrl}/auth/register/`;
-    return this.http.post(url, user);
+    return this.http.post(url, user, {
+      context: new HttpContext().set(SKIP_AUTH, true),
+    });
   }
 
   updateUser(id: number, user: UserPayload) {
